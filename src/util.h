@@ -1,5 +1,5 @@
 #pragma once
-#include "src\Bounce2\Bounce2.h"
+#include "Bounce2\Bounce2.h"
 
 #define arraySize(_array) ( sizeof(_array) / sizeof(*(_array)) )
 
