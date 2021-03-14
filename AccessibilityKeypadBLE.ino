@@ -11,6 +11,11 @@
    https://opensource.org/licenses/MIT
 */
 
+/*
+
+   Simple wiring: just connect one pin of button to GPIO from the config block (see below), and connect another pin of button to GND on dev-board.
+
+*/
 
 #include "src\Bounce2\Bounce2.h"
 #include "src\AccessibilityKeypadBLE.h"
@@ -19,14 +24,23 @@
 //*******************************************************************//
 //                            Config area                            //
 //*******************************************************************//
+// Activate Pull-Up on inputs, no external resistors need
 const uint8_t inputMode = INPUT_PULLUP;
+// Button bounces ignored for 10ms 
 const uint8_t debounceInterval = 10;
+// Keycode repeated every 250ms if button still pressed
 const uint32_t repeatSendControlInterval = 250;
 
-/*
-  https://i0.wp.com/www.bizkit.ru/wp-content/uploads/2019/12/MH-ET_LIVE_D1_mini_ESP32_pinout.png
-  https://support.google.com/accessibility/android/answer/6110948?hl=en#zippy=%2Cdefault-keymap
+// Uncomment if you want quick move to configuration block for Android Switch Access feature
+//#define SWITCH_ACCESS
 
+/*
+ https://support.google.com/accessibility/android/answer/6110948?hl=en#zippy=%2Cdefault-keymap
+ 
+
+
+// For MH-ET LIVE D1 mini ESP32
+  https://i0.wp.com/www.bizkit.ru/wp-content/uploads/2019/12/MH-ET_LIVE_D1_mini_ESP32_pinout.png
   GPIO # | Board mark | Description               | Control         | Shortcut / gesture
   2      | IO2        | State                     | LED (Onboard)   |
   27     | IO27       | Home                      | Button (White)  | Alt+Crl+h
@@ -34,8 +48,7 @@ const uint32_t repeatSendControlInterval = 250;
   12     | TDI        | Enter                     | Button (Yellow) | Alt+Enter / double tap
   17     | IO17       | Next Object               | Button (Red)    | Alt+Right / swipe right
   16     | IO16       | Read from the next object | Button (Blue)   | Alt+Ctrl+Shift+Enter
-  15     | TD0        |                           | 
-
+  15     | TD0        |                           
   13     | TCK        |
   14     | TMS        |
   33     | IO33       |
@@ -43,19 +56,19 @@ const uint32_t repeatSendControlInterval = 250;
 
 */
 
-//#define SWITCH_ACCESS
-
 #if defined(SWITCH_ACCESS)
-// Switch Access controls
+// Switch Access controls. You can use just one button 
 control_t control[] = {
-  27, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, // h
-  32, 0x00, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, // Left
+  // 27, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, // h
+  // 32, 0x00, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, // Left
   12, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, // Enter
-  17, 0x00, 0x00, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00, // Right
-  //  16, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, // Enter
+  // 17, 0x00, 0x00, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00, // Right
+  // 16, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, // Enter
 };
 #else
-// Talkback controls
+// Talkback controls. Add some button's config items if you need 
+
+// For MH-ET LIVE D1 mini ESP32
 control_t control[] = {
   27, (KEY_ALT | KEY_CTRL), 0x00, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00,             // Alt+Crl+h
   32, KEY_ALT, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Left
@@ -63,6 +76,17 @@ control_t control[] = {
   17, KEY_ALT, 0x00, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Right
   16, (KEY_ALT | KEY_CTRL | KEY_SHIFT), 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, // Alt+Ctrl+Shift+Enter
 };
+
+// For ESP32-WROOM-32 dev-board
+/*
+control_t control[] = {
+  12, (KEY_ALT | KEY_CTRL), 0x00, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00,             // Alt+Crl+h
+  13, KEY_ALT, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Left
+  14, KEY_ALT, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Enter
+  26, KEY_ALT, 0x00, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Right
+  27, (KEY_ALT | KEY_CTRL | KEY_SHIFT), 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, // Alt+Ctrl+Shift+Enter
+};
+*/
 #endif
 
 //*******************************************************************//
@@ -84,13 +108,13 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   turnLedOff(LED_BUILTIN);
   accessibilityKeypad = new AccessibilityKeypadBLE();
+
 }
 
 void loop() {
   if (accessibilityKeypad->isConnected()) {
     for (uint8_t i = 0x00; arraySize(control) > i; i++) {
       button[i].obj.update();
-      //ESP_LOGI(LOG_TAG, "Button %d state: %d", i, button[i].obj.read());
       if (button[i].obj.fell() || (LOW == button[i].obj.read() && millis() - button[i].lastPressedTime > repeatSendControlInterval)) {
         turnLedOn(LED_BUILTIN);
         accessibilityKeypad->sendControl(control[i].report);
