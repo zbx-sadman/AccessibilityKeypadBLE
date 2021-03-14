@@ -17,7 +17,11 @@ How to make device:
 - Make settings for Android Switch Access feature, if need; 
 - Use it.
 
-Device prototype:
+Device schematic:
+
+![Schematic](https://user-images.githubusercontent.com/12827470/111063811-c4308200-84c1-11eb-9621-f7102ec3c3a7.png)
+
+Device prototype (another dev-board used):
 
 ![Prototype](https://user-images.githubusercontent.com/12827470/111041727-b68be580-844a-11eb-8dbc-0f94b9277f78.png)
 
