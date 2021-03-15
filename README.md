@@ -2,6 +2,11 @@
 
 This project helps to use physical buttons or keypad with Android TalkBack or Android Switch Access technologies via BLE.
 
+### Features
+- Acts as BLE Keyboard HID device;
+- Can send complex shortcuts (up to 6 keys) with key modificators (Alt, Ctrl, Shift);
+- Pairing feature is available.
+
 ### You need
 - ESP32 board;
 - A number of buttons;

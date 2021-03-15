@@ -67,18 +67,43 @@ const inputReport_t NO_KEY_PRESSED = { };
 class AccessibilityKeypadBLE {
   public:
     AccessibilityKeypadBLE();
-    class keypadCallbacks : public BLEServerCallbacks {
+    class KeypadServerCallbacks : public BLEServerCallbacks {
       public:
-        keypadCallbacks(AccessibilityKeypadBLE* _parent): parent(_parent) {}
+        KeypadServerCallbacks(AccessibilityKeypadBLE* _parent): parent(_parent) {}
         void onConnect(BLEServer* server);
         void onDisconnect(BLEServer* server);
       private:
         AccessibilityKeypadBLE* parent;
     };
-    void sendControl(inputReport_t& _report);
+
+    class KeypadSecurityCallbacks : public BLESecurityCallbacks {
+      public:
+        KeypadSecurityCallbacks(AccessibilityKeypadBLE* _parent): parent(_parent) {}
+        bool onConfirmPIN(uint32_t);
+        uint32_t onPassKeyRequest();
+        void onPassKeyNotify(uint32_t);
+        bool onSecurityRequest();
+        void onAuthenticationComplete(esp_ble_auth_cmpl_t);
+
+      private:
+        AccessibilityKeypadBLE* parent;
+    };
+
+    void startPairing();
+    void stopPairing();
+    void requirePairing(const uint8_t);
+    uint8_t isPaired();
+
     uint8_t isConnected() { return connected; }
-    uint8_t connected = false;
+
+    void sendControl(inputReport_t&);
+
   private:
+    uint8_t connected     = false;
+    uint8_t needPairing   = false;
+    uint8_t enablePairing = false;
+    uint8_t donePairing   = false;
+
     BLEServer* server;
     BLEHIDDevice* hid;
     BLESecurity* security;

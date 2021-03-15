@@ -31,6 +31,16 @@ const uint8_t debounceInterval = 10;
 // Keycode repeated every 250ms if button still pressed
 const uint32_t repeatSendControlInterval = 250;
 
+// Uncomment for restrict access with "BLE Pairing by button" function.
+#define FEATURE_DEVICE_PAIRING_ENABLE
+// "Start pairing process" button's GPIO #
+const uint8_t pairingButtonPin = 14;
+// How much milliseconds to wait before stopping process if remote device ignore pairing offer
+const uint32_t pairingTimeout = 15000;
+// Blink / beep Interval while pairing is performed
+const uint32_t pairingSignalizeInterval = 500;
+
+
 // Uncomment if you want quick move to configuration block for Android Switch Access feature
 //#define SWITCH_ACCESS
 
@@ -96,9 +106,14 @@ control_t control[] = {
 #define LOG_TAG ""
 AccessibilityKeypadBLE* accessibilityKeypad;
 button_t button[arraySize(control)];
+#if defined(FEATURE_DEVICE_PAIRING_ENABLE)
+Bounce pairingButton;
+#endif
 
 void setup() {
   ESP_LOGE(LOG_TAG, "\n ***** System started *****\n");
+  Serial.begin(115200);
+
 
   // configure pin for button
   for (uint8_t i = 0x00; arraySize(control) > i; i++) {
@@ -108,11 +123,21 @@ void setup() {
   }
   pinMode(LED_BUILTIN, OUTPUT);
   turnLedOff(LED_BUILTIN);
+
   accessibilityKeypad = new AccessibilityKeypadBLE();
+
+#if defined(FEATURE_DEVICE_PAIRING_ENABLE)
+  pinMode(pairingButtonPin, inputMode);
+  pairingButton = Bounce(pairingButtonPin, debounceInterval);
+  accessibilityKeypad->requirePairing(true);
+#endif
 
 }
 
 void loop() {
+  yield();
+
+  //**** Button handling block ****
   if (accessibilityKeypad->isConnected()) {
     for (uint8_t i = 0x00; arraySize(control) > i; i++) {
       yield();
@@ -125,5 +150,34 @@ void loop() {
       }
     }
   }
-  yield();
+
+  //**** Pairing function block ****
+#if defined(FEATURE_DEVICE_PAIRING_ENABLE)
+  static uint32_t pairingStartTime, pairingLastSignalTime;
+  static uint8_t pairingInAction, pairingSignalOn;
+  pairingButton.update();
+  if (pairingButton.fell()) {
+    accessibilityKeypad->startPairing();
+    pairingLastSignalTime = pairingStartTime = millis();
+    pairingInAction = true;
+    pairingSignalOn = false;
+  }
+
+  if (accessibilityKeypad->isPaired()) {
+    pairingInAction = false;
+  }
+
+  if (pairingInAction) {
+    if (pairingTimeout < millis() - pairingStartTime) {
+      accessibilityKeypad->stopPairing();
+      turnLedOff(LED_BUILTIN);
+      pairingInAction = false;
+    }
+    if (pairingSignalizeInterval < millis() - pairingLastSignalTime) {
+      pairingSignalOn = !pairingSignalOn;
+      pairingSignalOn ? turnLedOn(LED_BUILTIN) : turnLedOff(LED_BUILTIN);
+      pairingLastSignalTime = millis();
+    }
+  }
+#endif
 }
