@@ -20,111 +20,85 @@
 #include "src\Bounce2\Bounce2.h"
 #include "src\AccessibilityKeypadBLE\AccessibilityKeypadBLE.h"
 #include "src\util.h"
+#include "src\sound.h"
 
 //*******************************************************************//
 //                            Config area                            //
 //*******************************************************************//
+
+// ************ Buttons settings ************
 // Activate Pull-Up on inputs, no external resistors need
 const uint8_t inputMode = INPUT_PULLUP;
 // Button bounces ignored for 10ms
 const uint8_t debounceInterval = 10;
 // Keycode repeated every 250ms if button still pressed
-const uint32_t repeatSendControlInterval = 250;
+const uint32_t repeatsendKeyInterval = 250;
 
+// ************ Sound settings ************
+// Uncomment for using sound notification feature
+#define FEATURE_DEVICE_BUZZING_ENABLE
+
+// Type of sound device. Use SOUND_NONE for sound off and SOUND_PASSIVE_BUZZER for use passive buzzer
+//const uint8_t soundDeviceType = SOUND_PASSIVE_BUZZER; 
+const uint8_t soundDeviceType = SOUND_NONE; 
+// Buzzer pin, use any number if sound device is SOUND_NONE 
+const int8_t buzzerPin = 26;
+// Level on the pin, which activate buzzer
+const uint8_t passiveBuzzerOnLevel = HIGH;
+
+// ************ Illumination settings ************
+const uint8_t statusLedPin = LED_BUILTIN;
+
+// ************ BLE pairing settings ************
 // Uncomment for restrict access with "BLE Pairing by button" function.
 #define FEATURE_DEVICE_PAIRING_ENABLE
 // "Start pairing process" button's GPIO #
-const uint8_t pairingButtonPin = 14;
+const uint8_t pairingButtonPin = 12;
+//const uint8_t pairingButtonPin = 14;
 // How much milliseconds to wait before stopping process if remote device ignore pairing offer
 const uint32_t pairingTimeout = 15000;
 // Blink / beep Interval while pairing is performed
 const uint32_t pairingSignalizeInterval = 500;
 
-
-// Uncomment if you want quick move to configuration block for Android Switch Access feature
-//#define SWITCH_ACCESS
-
-/*
-  https://support.google.com/accessibility/android/answer/6110948?hl=en#zippy=%2Cdefault-keymap
-
-
-
-  // For MH-ET LIVE D1 mini ESP32
-  https://i0.wp.com/www.bizkit.ru/wp-content/uploads/2019/12/MH-ET_LIVE_D1_mini_ESP32_pinout.png
-  GPIO # | Board mark | Description               | Control         | Shortcut / gesture
-  2      | IO2        | State                     | LED (Onboard)   |
-  27     | IO27       | Home                      | Button (White)  | Alt+Crl+h
-  32     | IO32       | Prev object               | Button (Green)  | Alt+Left  / swipe left
-  12     | TDI        | Enter                     | Button (Yellow) | Alt+Enter / double tap
-  17     | IO17       | Next Object               | Button (Red)    | Alt+Right / swipe right
-  16     | IO16       | Read from the next object | Button (Blue)   | Alt+Ctrl+Shift+Enter
-  15     | TD0        |
-  13     | TCK        |
-  14     | TMS        |
-  33     | IO33       |
-  26     | IO26       |
-
-*/
-
-#if defined(SWITCH_ACCESS)
-// Switch Access controls. You can use just one button
-control_t control[] = {
-  // 27, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, // h
-  // 32, 0x00, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, // Left
-  12, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, // Enter
-  // 17, 0x00, 0x00, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00, // Right
-  // 16, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, // Enter
-};
-
-#else
-// Talkback controls. Add some button's config items if you need
-
-// For MH-ET LIVE D1 mini ESP32
-control_t control[] = {
-  27, (KEY_ALT | KEY_CTRL), 0x00, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00,             // Alt+Crl+h
-  32, KEY_ALT, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Left
-  12, KEY_ALT, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Enter
-  17, KEY_ALT, 0x00, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Right
-  16, (KEY_ALT | KEY_CTRL | KEY_SHIFT), 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, // Alt+Ctrl+Shift+Enter
-};
-
-// For ESP32-WROOM-32 dev-board
-/*
-  control_t control[] = {
-  12, (KEY_ALT | KEY_CTRL), 0x00, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00,             // Alt+Crl+h
-  13, KEY_ALT, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Left
-  14, KEY_ALT, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Enter
-  26, KEY_ALT, 0x00, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00,                          // Alt+Right
-  27, (KEY_ALT | KEY_CTRL | KEY_SHIFT), 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, // Alt+Ctrl+Shift+Enter
-  };
-*/
-#endif
+// ************ Work mode settings ************
+// Quickly change keymap (see or edit variants.h)
+// Choose only one.
+//#define KEYMAP_SWITCH_ACCESS_ANY_BOARD
+#define KEYMAP_TALKBACK_MH_ET_LIVE_MINIKIT_ESP32
+// #define KEYMAP_TALKBACK_ESP32_WROOM_32
+#include "keymaps.h"
 
 //*******************************************************************//
 //                            System area                            //
 //*******************************************************************//
 #define LOG_TAG ""
 AccessibilityKeypadBLE* accessibilityKeypad;
-button_t button[arraySize(control)];
+button_t button[arraySize(keyMap)];
+SoundDevice* soundDevice;
+typedef enum : uint8_t {psIdle, psInAction, psFinalize} pairingStage_t;
+
 #if defined(FEATURE_DEVICE_PAIRING_ENABLE)
 Bounce pairingButton;
 #endif
 
 void setup() {
   ESP_LOGE(LOG_TAG, "\n ***** System started *****\n");
-  Serial.begin(115200);
-
+  //  Serial.begin(115200);
 
   // configure pin for button
-  for (uint8_t i = 0x00; arraySize(control) > i; i++) {
+  for (uint8_t i = 0x00; arraySize(keyMap) > i; i++) {
     yield();
-    pinMode(control[i].inputPin, inputMode);
-    button[i].obj = Bounce(control[i].inputPin, debounceInterval);
+    pinMode(keyMap[i].inputPin, inputMode);
+    button[i].obj = Bounce(keyMap[i].inputPin, debounceInterval);
   }
-  pinMode(LED_BUILTIN, OUTPUT);
-  turnLedOff(LED_BUILTIN);
+  pinMode(statusLedPin, OUTPUT);
+  turnLedOff(statusLedPin);
 
   accessibilityKeypad = new AccessibilityKeypadBLE();
+
+  soundDevice = new SoundDevice();
+  soundDevice->configure(soundDeviceType, buzzerPin, passiveBuzzerOnLevel);
+  soundDevice->turnOff();
 
 #if defined(FEATURE_DEVICE_PAIRING_ENABLE)
   pinMode(pairingButtonPin, inputMode);
@@ -139,13 +113,13 @@ void loop() {
 
   //**** Button handling block ****
   if (accessibilityKeypad->isConnected()) {
-    for (uint8_t i = 0x00; arraySize(control) > i; i++) {
+    for (uint8_t i = 0x00; arraySize(keyMap) > i; i++) {
       yield();
       button[i].obj.update();
-      if (button[i].obj.fell() || (LOW == button[i].obj.read() && millis() - button[i].lastPressedTime > repeatSendControlInterval)) {
-        turnLedOn(LED_BUILTIN);
-        accessibilityKeypad->sendControl(control[i].report);
-        turnLedOff(LED_BUILTIN);
+      if (button[i].obj.fell() || (LOW == button[i].obj.read() && millis() - button[i].lastPressedTime > repeatsendKeyInterval)) {
+        turnLedOn(statusLedPin);
+        accessibilityKeypad->sendKey(keyMap[i].report);
+        turnLedOff(statusLedPin);
         button[i].lastPressedTime = millis();
       }
     }
@@ -154,30 +128,46 @@ void loop() {
   //**** Pairing function block ****
 #if defined(FEATURE_DEVICE_PAIRING_ENABLE)
   static uint32_t pairingStartTime, pairingLastSignalTime;
-  static uint8_t pairingInAction, pairingSignalOn;
+  static uint8_t pairingSignalOn;
+  static pairingStage_t pairingStage = psIdle;
   pairingButton.update();
-  if (pairingButton.fell()) {
-    accessibilityKeypad->startPairing();
-    pairingLastSignalTime = pairingStartTime = millis();
-    pairingInAction = true;
-    pairingSignalOn = false;
-  }
 
-  if (accessibilityKeypad->isPaired()) {
-    pairingInAction = false;
-  }
+  // Pairing processing state machine
+  switch (pairingStage) {
+    case psIdle: {
+        if (!pairingButton.fell()) {
+          break;
+        }
+        accessibilityKeypad->startPairing();
+        pairingLastSignalTime = pairingStartTime = millis();
+        pairingStage = psInAction;
+        break;
+      } // case psIdle
 
-  if (pairingInAction) {
-    if (pairingTimeout < millis() - pairingStartTime) {
-      accessibilityKeypad->stopPairing();
-      turnLedOff(LED_BUILTIN);
-      pairingInAction = false;
-    }
-    if (pairingSignalizeInterval < millis() - pairingLastSignalTime) {
-      pairingSignalOn = !pairingSignalOn;
-      pairingSignalOn ? turnLedOn(LED_BUILTIN) : turnLedOff(LED_BUILTIN);
-      pairingLastSignalTime = millis();
-    }
-  }
+    case psInAction: {
+        if (accessibilityKeypad->isPaired()) {
+          pairingStage = psFinalize;
+        }
+        if (pairingTimeout < millis() - pairingStartTime) {
+          accessibilityKeypad->stopPairing();
+          pairingStage = psFinalize;
+        }
+        if (pairingSignalizeInterval < millis() - pairingLastSignalTime) {
+          pairingSignalOn = !pairingSignalOn;
+          pairingSignalOn ? turnLedOn(statusLedPin) : turnLedOff(statusLedPin);
+          pairingSignalOn ? soundDevice->turnOn() : soundDevice->turnOff();
+          pairingLastSignalTime = millis();
+        }
+        break;
+      } // case psInAction
+
+    case psFinalize: {
+        turnLedOff(statusLedPin);
+        soundDevice->turnOff();
+        pairingStage = psIdle;
+        break;
+      } // case psFinalize
+  } // switch (pairingStage)
+
 #endif
 }

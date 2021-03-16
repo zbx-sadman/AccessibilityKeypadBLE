@@ -21,7 +21,7 @@ typedef struct {
 typedef struct {
   uint8_t inputPin;
   inputReport_t report;
-} control_t;
+} keyMap_t;
 
 // The report map describes the HID device (a keyboard in this case) and
 // the messages (reports in HID terms) sent and received.
@@ -96,7 +96,7 @@ class AccessibilityKeypadBLE {
 
     uint8_t isConnected() { return connected; }
 
-    void sendControl(inputReport_t&);
+    void sendKey(inputReport_t&);
 
   private:
     uint8_t connected     = false;

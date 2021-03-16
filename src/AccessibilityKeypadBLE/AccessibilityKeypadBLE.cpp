@@ -42,7 +42,7 @@ void AccessibilityKeypadBLE::KeypadServerCallbacks::onDisconnect(BLEServer* serv
    ESP_LOGI(TAG_BLE_ACCESSIBILITY_KEYPAD, "Client has disconnected");
 }
 
-void AccessibilityKeypadBLE::sendControl(inputReport_t& _report) {
+void AccessibilityKeypadBLE::sendKey(inputReport_t& _report) {
    ESP_LOGI(TAG_BLE_ACCESSIBILITY_KEYPAD, "Send control (mod | scan): %#02x | %#02x", _report.modifiers, _report.pressedKeys[0x00]);
    input->setValue((uint8_t*)&_report, sizeof(_report));
    input->notify();
@@ -79,7 +79,6 @@ uint8_t AccessibilityKeypadBLE::isPaired() {
 void AccessibilityKeypadBLE::requirePairing(const uint8_t _needPairing) {
    needPairing = _needPairing; 
 }
-
 
 
 bool AccessibilityKeypadBLE::KeypadSecurityCallbacks::onConfirmPIN(uint32_t _pinCode) { 

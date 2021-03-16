@@ -5,6 +5,7 @@ This project helps to use physical buttons or keypad with Android TalkBack or An
 ### Features
 - Acts as BLE Keyboard HID device;
 - Can send complex shortcuts (up to 6 keys) with key modificators (Alt, Ctrl, Shift);
+- Sound notification possibility;
 - Pairing feature is available.
 
 ### You need
