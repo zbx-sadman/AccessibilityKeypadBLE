@@ -24,8 +24,10 @@
 - Passive buzzer module- GPIO26
 - PS/2 Keyboard clock - GPIO4
 - PS/2 Keyboard data - GPIO5
+- 
+Клавиатура PS/2 соединяется через конвертор логических уровней 3.3V <=> 5V.
 
-![AccessKeypad BLE wiring](https://user-images.githubusercontent.com/12827470/116597869-d01bba80-a92e-11eb-95e2-c07fadea800d.png)
+![AccessKeypad BLE wiring](https://user-images.githubusercontent.com/12827470/116598033-078a6700-a92f-11eb-9609-62784febb2f1.png)
 
 ### Управление
 1) Включение устройства: выключить напряжение, дождаться однократного звукового сигнала.
