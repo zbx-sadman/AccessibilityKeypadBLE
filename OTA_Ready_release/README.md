@@ -18,6 +18,15 @@
 - OTA-обновление прошивки;
 - Импорт/экспорт конфигурации.
 
+### Схема соединений
+
+...
+- Buzzer - GPIO26
+- Control Button - GPIO13
+- PS/2 Keyboard data - GPIO5
+- PS/2 Keyboard clock - GPIO4
+...
+
 ### Снимки интерфейса
 AccessKeypad BLE присоединен к Android как BLE-клавиатура
 
