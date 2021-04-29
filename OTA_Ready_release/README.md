@@ -21,6 +21,7 @@
 ### Схема соединений
 
 ...
+- Status led - GPIO2
 - Buzzer - GPIO26
 - Control Button - GPIO13
 - PS/2 Keyboard data - GPIO5
