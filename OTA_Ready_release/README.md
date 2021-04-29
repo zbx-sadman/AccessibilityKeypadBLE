@@ -19,14 +19,13 @@
 - Импорт/экспорт конфигурации.
 
 ### Схема соединений
-
-...
 - Status led - GPIO2
-- Buzzer - GPIO26
 - Control Button - GPIO13
-- PS/2 Keyboard data - GPIO5
+- Passive buzzer module- GPIO26
 - PS/2 Keyboard clock - GPIO4
-...
+- PS/2 Keyboard data - GPIO5
+
+![AccessKeypad BLE wiring](https://user-images.githubusercontent.com/12827470/116597869-d01bba80-a92e-11eb-95e2-c07fadea800d.png)
 
 ### Управление
 1) Включение устройства: выключить напряжение, дождаться однократного звукового сигнала.
