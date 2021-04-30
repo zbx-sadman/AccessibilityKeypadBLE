@@ -39,7 +39,7 @@
 ### Прототип (PS/2 model)
 ![AccessKeypad BLE prototype](https://user-images.githubusercontent.com/12827470/116737006-57356500-a9f9-11eb-8157-6ea62c39171c.jpg)
 
-Раскладка для данного блока клавиш:
+Раскладка Talkback для данного блока клавиш:
   - "ESC" - TalkBack start/stop
   - "F1" - Browser 
   - "F2" - Assistent 
