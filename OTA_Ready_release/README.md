@@ -39,6 +39,26 @@
 ### Прототип (PS/2 model)
 ![AccessKeypad BLE prototype](https://user-images.githubusercontent.com/12827470/116737006-57356500-a9f9-11eb-8157-6ea62c39171c.jpg)
 
+Раскладка для данного блока клавиш:
+  - "ESC" - TalkBack start/stop
+  - "F1" - Browser 
+  - "F2" - Assistent 
+  - "F3" - Notifications
+  - "7"  - First item
+  - "8" - Home screen
+  - "9" - Read from top item
+  - "<-" - Tab
+  - "4" - Previous item
+  - "5" - Click on focused
+  - "6" - Next item
+  - "F4" - Previous heading
+  - "Enter" - Next heading
+  - "1" - Back
+  - "2" - Previous window
+  - "9" - Read from next item
+  - "0" - Stop TalkBack speech
+  - "Dot" - TalkBack menu
+
 ### Снимки интерфейса
 AccessKeypad BLE присоединен к Android как BLE-клавиатура
 
