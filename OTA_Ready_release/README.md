@@ -74,20 +74,20 @@
 ### Снимки интерфейса
 AccessKeypad BLE присоединен к Android как BLE-клавиатура
 
-![AccessKeypad BLE connected as bluetooth keyboard](https://user-images.githubusercontent.com/12827470/116542647-8ebae900-a8f5-11eb-9237-d2da0069326f.jpg)
+![AccessKeypad BLE connected as bluetooth keyboard](https://user-images.githubusercontent.com/12827470/116915711-120d6f00-ac55-11eb-80b9-f99faab173e7.png)
 
 AccessKeypad BLE доступен как Wi-Fi точка доступа для изменения настроек системы
 
-![AccessKeypad BLE acts as access point](https://user-images.githubusercontent.com/12827470/116542781-b8741000-a8f5-11eb-840f-3ebbb12d8ce2.jpg)
+![AccessKeypad BLE acts as access point](https://user-images.githubusercontent.com/12827470/116915724-13d73280-ac55-11eb-9d52-8600a591cac8.png)
 
 Настройки системы, доступные в Web-конфигураторе.
 
-![AccessKeypad BLE Web Configurator screenshoot 03](https://user-images.githubusercontent.com/12827470/116542872-d80b3880-a8f5-11eb-8c27-2a707251d780.jpg)
-![AccessKeypad BLE Web Configurator screenshoot 02](https://user-images.githubusercontent.com/12827470/116542874-d8a3cf00-a8f5-11eb-95ac-ddb6f25b9f7b.jpg)
+![AccessKeypad BLE Web Configurator screenshoot 01](https://user-images.githubusercontent.com/12827470/116915729-16398c80-ac55-11eb-968d-3cab4fc4a234.png)
+![AccessKeypad BLE Web Configurator screenshoot 02](https://user-images.githubusercontent.com/12827470/116915734-18035000-ac55-11eb-92ba-cd77d581295c.png)
 
 
-![AccessKeypad BLE Web Configurator screenshoot 01](https://user-images.githubusercontent.com/12827470/116542877-d93c6580-a8f5-11eb-9367-ce0151d450b9.jpg)
-![AccessKeypad BLE Web Configurator screenshoot 04](https://user-images.githubusercontent.com/12827470/116542869-d772a200-a8f5-11eb-8251-fe0b20cda9bd.jpg)
+![AccessKeypad BLE Web Configurator screenshoot 03](https://user-images.githubusercontent.com/12827470/116915741-19cd1380-ac55-11eb-8504-6f99880d43fb.png)
+![AccessKeypad BLE Web Configurator screenshoot 04](https://user-images.githubusercontent.com/12827470/116915746-1c2f6d80-ac55-11eb-93ba-f13a5e52eb9a.png)
 
 
 ### Изменения в версиях
