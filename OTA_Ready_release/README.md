@@ -49,7 +49,7 @@
 - Воспользуйтесь режимом "One shoot on hold" для однократного действия, связанного с клавишей-источником, если Вы испытываете проблему со своевременным отпусканием клавиши/кнопки-источника. 
 
 ### Прототип (PS/2 model)
-![AccessKeypad BLE prototype](https://user-images.githubusercontent.com/12827470/116737006-57356500-a9f9-11eb-8157-6ea62c39171c.jpg)
+![AccessKeypad BLE prototype PS/2 keypad connected](https://user-images.githubusercontent.com/12827470/116737006-57356500-a9f9-11eb-8157-6ea62c39171c.jpg)
 
 Раскладка Talkback для данного блока клавиш:
   - "ESC" - TalkBack start/stop
@@ -71,6 +71,12 @@
   - "0" - Stop TalkBack speech
   - "Dot" - TalkBack menu
 
+### Прототип (GPIO model)
+Однокнопочный орган управления для Android Switch Access. Использование USB-разъёма обусловлено конструктивной особенностью корпуса для Raspberry Pi - в нем уже существует соответствующее отверстие. Внутри "большой кнопки" D+ замыкается на GND, а VCC не используется.
+![AccessKeypad BLE prototype GPIO button connected](https://user-images.githubusercontent.com/12827470/116976162-766a1600-acc9-11eb-8251-cef65a3f9312.jpg)
+
+![Using AccessKeypad BLE with SwitchAccess technology](https://user-images.githubusercontent.com/12827470/116979006-20976d00-accd-11eb-901d-80b6cc14dc68.jpg)
+
 ### Снимки интерфейса
 AccessKeypad BLE присоединен к Android как BLE-клавиатура
 
@@ -88,7 +94,6 @@ AccessKeypad BLE доступен как Wi-Fi точка доступа для 
 
 ![AccessKeypad BLE Web Configurator screenshoot 03](https://user-images.githubusercontent.com/12827470/116915741-19cd1380-ac55-11eb-8504-6f99880d43fb.png)
 ![AccessKeypad BLE Web Configurator screenshoot 04](https://user-images.githubusercontent.com/12827470/116915746-1c2f6d80-ac55-11eb-93ba-f13a5e52eb9a.png)
-
 
 ### Изменения в версиях
 #### 0.2
