@@ -99,6 +99,12 @@ AccessKeypad BLE доступен как Wi-Fi точка доступа для 
 ![AccessKeypad BLE Web Configurator screenshoot 04](https://user-images.githubusercontent.com/12827470/116915746-1c2f6d80-ac55-11eb-93ba-f13a5e52eb9a.png)
 
 ### Изменения в версиях
+#### 0.3
+- Улучшено взаимодействие с клавиатурой PS/2;
+- Произведена адаптация для совместимости Apple IOS (технологии VoiceOver и Switch Control). Тестирование проведено на iPhone 4s (IOS 9.3.2).
+
+Note: В целях отладки уровень заряда батареи показывает объём доступной памяти ESP32. В последующих версиях такая особенность будет исправлена.
+
 #### 0.2
 - Убрана глобальная опция "Enable repeat on keypress", вместо нее введены индивидуальные режимы режимы "... on hold" для клавиш/кнопок-источников;
 - В список клавиш-целей добавлены мультимедийные кнопки Volume+, Volume-, Mute, Play/Pause, Next Track, Previous Track, Fast Forward, Rewind.
