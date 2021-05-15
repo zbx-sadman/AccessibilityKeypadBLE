@@ -98,6 +98,11 @@ AccessKeypad BLE доступен как Wi-Fi точка доступа для 
 ![AccessKeypad BLE Web Configurator screenshoot 03](https://user-images.githubusercontent.com/12827470/116915741-19cd1380-ac55-11eb-8504-6f99880d43fb.png)
 ![AccessKeypad BLE Web Configurator screenshoot 04](https://user-images.githubusercontent.com/12827470/116915746-1c2f6d80-ac55-11eb-93ba-f13a5e52eb9a.png)
 
+Подключение AccessKeypad BLE к iPhone (IOS 9)
+
+![AccessKeypad BLE pairing to iPhone_01](https://user-images.githubusercontent.com/12827470/118355883-346b8a80-b57b-11eb-8fb9-2c6de69b9603.png)
+![AccessKeypad BLE pairing to iPhone_02](https://user-images.githubusercontent.com/12827470/118355969-a9d75b00-b57b-11eb-9a76-dbf87e0abcec.png)
+
 ### Изменения в версиях
 #### 0.3
 - Улучшено взаимодействие с клавиатурой PS/2;
